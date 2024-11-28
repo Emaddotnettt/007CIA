@@ -7,13 +7,13 @@ import { renderErrorPage } from '../pages/error';
 export async function getDataset(request, env) {
     await initializeParams(request, env);
     let proxySettings, warpConfigs;
-    if (typeof env.bpb !== 'object') {
+    if (typeof env.emad !== 'object') {
         return {kvNotFound: true, proxySettings: null, warpConfigs: null}
     }
 
     try {
-        proxySettings = await env.bpb.get("proxySettings", {type: 'json'});
-        warpConfigs = await env.bpb.get('warpConfigs', {type: 'json'});
+        proxySettings = await env.emad.get("proxySettings", {type: 'json'});
+        warpConfigs = await env.emad.get('warpConfigs', {type: 'json'});
     } catch (error) {
         console.log(error);
         throw new Error(`An error occurred while getting KV - ${error}`);
@@ -37,13 +37,13 @@ export async function updateDataset (request, env) {
     let currentSettings;
     if (!isReset) {
         try {
-            currentSettings = await env.bpb.get("proxySettings", {type: 'json'});
+            currentSettings = await env.emad.get("proxySettings", {type: 'json'});
         } catch (error) {
             console.log(error);
             throw new Error(`An error occurred while getting current KV settings - ${error}`);
         }
     } else {
-        await env.bpb.delete('warpConfigs');
+        await env.emad.delete('warpConfigs');
         newSettings = null;
     }
 
